@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Кинотеатр</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <h1>Кинотеатр</h1>
+    <p>Выбери фильм и оставь свой комментарий.</p>
+
+    <form method="get">
+        <input type="text" name="name" value="{{ search_name }}" placeholder="Название фильма">
+        <select name="janore">
+            <option value="">Все жанры</option>
+            {% for janore in janorelar %}
+                <option value="{{ janore.pk }}" {% if selected_janore == janore.pk|stringformat:'s' %}selected{% endif %}>
+                    {{ janore.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Найти</button>
+        <a href="{% url 'home' %}">Сбросить</a>
+    </form>
+
+    <h2>Фильмы</h2>
+    {% if kinolar %}
+        {% for kino in kinolar %}
+            <div class="film">
+                {% if kino.poster %}
+                    <img src="{{ kino.poster.url }}" alt="Постер фильма {{ kino.name }}">
+                {% endif %}
+                <h3><a href="{% url 'kino_detail' kino.pk %}">{{ kino.name }}</a></h3>
+                <p>{{ kino.year }} год, {{ kino.country }}</p>
+                <p>Жанры:
+                    {% for janore in kino.janore.all %}
+                        {{ janore.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        не указаны
+                    {% endfor %}
+                </p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Фильмы не найдены.</p>
+    {% endif %}
+</body>
+</html>

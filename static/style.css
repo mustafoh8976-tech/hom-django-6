@@ -1,0 +1,27 @@
+body {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 15px;
+    font-family: Arial, sans-serif;
+    color: #222;
+}
+
+input, select, textarea, button {
+    padding: 8px;
+    margin: 4px;
+    font: inherit;
+}
+
+.film, .comment {
+    margin: 15px 0;
+    padding: 12px;
+    border: 1px solid #cccccc;
+}
+
+.film img, .poster {
+    max-width: 180px;
+}
+
+.error {
+    color: red;
+}

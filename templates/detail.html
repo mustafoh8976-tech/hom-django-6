@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ kino.name }}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <p><a href="{% url 'home' %}">На главную</a></p>
+
+    {% if kino.poster %}
+        <img class="poster" src="{{ kino.poster.url }}" alt="Постер фильма {{ kino.name }}">
+    {% endif %}
+    <h1>{{ kino.name }}</h1>
+    <p>{{ kino.year }} год, {{ kino.country }}</p>
+    <p>{{ kino.description }}</p>
+    <p>Жанры:
+        {% for janore in kino.janore.all %}
+            {{ janore.name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+            не указаны
+        {% endfor %}
+    </p>
+
+    <h2>Комментарии</h2>
+    {% for komentar in komentari %}
+        <div class="comment">
+            <strong>{{ komentar.name }}</strong>
+            <p>{{ komentar.text }}</p>
+            <small>{{ komentar.created_at|date:'d.m.Y H:i' }}</small>
+        </div>
+    {% empty %}
+        <p>Комментариев пока нет.</p>
+    {% endfor %}
+
+    <h3>Оставить комментарий</h3>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <p><input type="text" name="name" value="{{ comment_name }}" placeholder="Твоё имя" maxlength="100" required></p>
+        <p><textarea name="text" rows="4" placeholder="Комментарий" required>{{ comment_text }}</textarea></p>
+        <button type="submit">Отправить</button>
+    </form>
+</body>
+</html>
